@@ -2,21 +2,24 @@
 Takes a [Notion.so](https://notion.so) export .zip and enhances it
 """
 
-import tempfile
-import sys
-import os
-import time
-import re
 import argparse
-import zipfile
+import datetime
+import os
+import re
+import sys
+import tempfile
+import time
 import urllib.parse
+import zipfile
 from datetime import datetime
 from pathlib import Path
+
 import backoff
 import requests
 from emoji_extractor.extract import Extractor as EmojiExtractor
-from notion.client import NotionClient
 from notion.block import PageBlock
+from notion.client import NotionClient
+
 
 def noteNameRewrite(nCl, originalNameNoExt):
   """
@@ -289,7 +292,7 @@ def rewriteNotionZip(notionClient, zipPath, outputPath=".", removeTopH1=False, r
             mdFileData = mdFileRewrite(renamer, relPath, mdFileContents=mdFileData, removeTopH1=removeTopH1, rewritePaths=rewritePaths)
 
             print(f"Writing as '{newPath}' with time '{lastEditedTime}'")
-            zi = zipfile.ZipInfo(newPath, lastEditedTime.timetuple())
+            zi = zipfile.ZipInfo(newPath, (lastEditedTime or datetime.datetime.today()).timetuple())
             zf.writestr(zi, mdFileData)
           else:
             print(f"Writing as '{newPath}' with time from original export (not an .md file)")
