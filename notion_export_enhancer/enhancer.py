@@ -281,7 +281,7 @@ def rewriteNotionZip(notionClient, zipPath, outputPath=".", removeTopH1=False, r
 
           # Rewrite the current path and get the times from Notion
           print("---")
-          print(f"Working on '{relPath}'")
+          print(f"Working2 on '{relPath}'")
           newPath, createdTime, lastEditedTime = renamer.renamePathAndTimesWithNotion(relPath)
 
           if os.path.splitext(name)[1] == ".md":
@@ -290,7 +290,7 @@ def rewriteNotionZip(notionClient, zipPath, outputPath=".", removeTopH1=False, r
               mdFileData = f.read()
             mdFileData = mdFileRewrite(renamer, relPath, mdFileContents=mdFileData, removeTopH1=removeTopH1, rewritePaths=rewritePaths)
 
-            print(f"Writing as '{newPath}' with time '{lastEditedTime}'")
+            print(f"Writing2 as '{newPath}' with time '{lastEditedTime}'")
             zi = zipfile.ZipInfo(newPath, lastEditedTime.timetuple())
             zf.writestr(zi, mdFileData)
           else:
