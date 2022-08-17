@@ -3,7 +3,6 @@ Takes a [Notion.so](https://notion.so) export .zip and enhances it
 """
 
 import argparse
-import datetime
 import os
 import re
 import sys
@@ -87,7 +86,7 @@ def noteNameRewrite(nCl, originalNameNoExt):
 
   # Also get the times to set the file to
   createdTime = datetime.fromtimestamp(int(pageBlock._get_record_data()["created_time"])/1000)
-  lastEditedTime = datetime.fromtimestamp(int(pageBlock._get_record_data()["last_edited_time"])/1000)
+  lastEditedTime = datetime.fromtimestamp(int(pageBlock._get_record_data()["last_edited_time"])/1000) or datetime.datetime.today()
 
   return (newName, createdTime, lastEditedTime)
 
@@ -292,7 +291,7 @@ def rewriteNotionZip(notionClient, zipPath, outputPath=".", removeTopH1=False, r
             mdFileData = mdFileRewrite(renamer, relPath, mdFileContents=mdFileData, removeTopH1=removeTopH1, rewritePaths=rewritePaths)
 
             print(f"Writing as '{newPath}' with time '{lastEditedTime}'")
-            zi = zipfile.ZipInfo(newPath, (lastEditedTime or datetime.datetime.today()).timetuple())
+            zi = zipfile.ZipInfo(newPath, lastEditedTime.timetuple())
             zf.writestr(zi, mdFileData)
           else:
             print(f"Writing as '{newPath}' with time from original export (not an .md file)")
